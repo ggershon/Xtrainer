@@ -36,8 +36,7 @@ function initDemo() {
     // get all scenarios and show them on left top side of the screen as icons
     scenarioHandler.getScenarios();
     addStylesToPage();
-    scenarioHandler.showScenariosToolbar();
-  
+    
 }
 
 var scenarioHandler = {
@@ -52,6 +51,7 @@ var scenarioHandler = {
             dataType: 'jsonp',
             success: function (json) {
                 scenarioHandler.scenarios = json;
+                scenarioHandler.showMenuBox();
             },
             error: function (e) {
                 alert("ERROR ERROR ERROR");
@@ -59,11 +59,25 @@ var scenarioHandler = {
             }
         });
     },
+    showMenuBox : function(){
+        $('body').prepend("<div id='xtScenarioMenu' class='xtTopMenu'>&nbsp;&nbsp;&nbsp;</div>");
+        $("#xtScenarioMenu").hover(function () {
+            scenarioHandler.showScenariosToolbar();
+        },
+        function () {
+            $("#xtMenuLst").remove();
+        }
+        );
+    },
     showScenariosToolbar : function(){
         // Add toolbar
-        var aaa =  $('body');
-        $('body').prepend("<div id='xtScenarioMenu' class='xtTopMenu'>123 456 testing</div>");
-        $('#xtScenarioMenu').hover( function () { alert(10); });
+        var aaa = $('body');
+        var menu = "<ul id='xtMenuLst'>";
+        for (var i = 0; i < scenarioHandler.scenarios.length; i++) {
+            menu = menu.concat("<li><div><div onclick='alert(" + i + ")'>SC" + i + "</div></div></li>");
+        }
+        menu.concat("</ul>");
+        $('#xtScenarioMenu').prepend(menu);
     },
 
     setNextStep: function (step) {
@@ -175,10 +189,20 @@ z-index: 9999999; \
 } \
 .xtTopMenu {\
 position: absolute;\
-top: 100;\
- left: 100;\
-right: 100;\
-    ";
+	width: 200px;\
+top: 0;\
+ left: 0;\
+right: 0;\
+ }\
+.xtTopMenu ul {\
+    list-style-type: none;\
+    margin: 0;\
+    padding: 0;\
+}\
+\
+.xtTopMenu ul li {float: left; }\
+.xtTopMenu ul li a{display: block; }\
+";
     head = document.getElementsByTagName('head')[0],
     style = document.createElement('style');
 
