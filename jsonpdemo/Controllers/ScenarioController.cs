@@ -13,7 +13,7 @@ namespace jsonpdemo.Controllers
         // GET: api/Scenario
         public List<Scenario> Get()
         {
-            return ScenariosData.GetScenarios();
+            return ScenariosData.Instance.GetScenarios();
         }
 
         // GET: api/Scenario/5

@@ -13,5 +13,6 @@ namespace jsonpdemo.Models
         public string SearchProp { get; set; }
         public string BubbleType { get; set; }
         public string BubbleText { get; set; }
+        public int Id { get; set; }
     }
 }

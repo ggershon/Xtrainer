@@ -33,48 +33,39 @@
 
 function initDemo() {
 
-    $.ajax({
-        type: 'GET',
-        url: "http://localhost:59514/api/values",
-        async: true,
-        jsonpCallback: 'jsonCallback',
-        contentType: "application/json",
-        dataType: 'jsonp',
-        success: function (json) {
-            console.log("succeess");
-            console.dir(json);
-            // Add style element to window
-            addStylesToPage();            
-          
-            var testScenario = {
-                name: "aaaa", id: 2,
-                currentStep: {
-                    name: "step 1",
-                    description: "step description",
-                    bindObject: "categories",
-                    bindObjectType: "id", // id/name...ther attributes,
-                    location : "top", // top/buttom/left/right
-                    triggerNext : "" // blur/clicked...
-                }
-            };
-
-           
-
-            scenarioHandler.setNextStep(testScenario.currentStep);
-
-           
-
-        },
-        error: function (e) {
-            alert("ERROR ERROR ERROR");
-            console.log(e.message);
-          
-        }
-    });
-
+    // get all scenarios and show them on left top side of the screen as icons
+    scenarioHandler.getScenarios();
+    addStylesToPage();
+    scenarioHandler.showScenariosToolbar();
+  
 }
 
 var scenarioHandler = {
+    scenarios : null,
+    getScenarios : function(){
+        $.ajax({
+            type: 'GET',
+            url: "http://localhost:59514/api/Scenario",
+            async: true,
+            jsonpCallback: 'jsonCallback',
+            contentType: "application/json",
+            dataType: 'jsonp',
+            success: function (json) {
+                scenarioHandler.scenarios = json;
+            },
+            error: function (e) {
+                alert("ERROR ERROR ERROR");
+                console.log(e.message);
+            }
+        });
+    },
+    showScenariosToolbar : function(){
+        // Add toolbar
+        var aaa =  $('body');
+        $('body').prepend("<div id='xtScenarioMenu' class='xtTopMenu'>123 456 testing</div>");
+        $('#xtScenarioMenu').hover( function () { alert(10); });
+    },
+
     setNextStep: function (step) {
         var selector = "[" + step.bindObjectType + "=" + step.bindObject + "]";
         console.log(selector);
@@ -100,7 +91,6 @@ var scenarioHandler = {
             jQuery(selector).append("<div class='bubbleRight'  id='bubble'>" + step.description + "</div>")
                      .show();
         }
-        debugger;
         jQuery(selector).click( function () {
             jQuery("#bubble").remove();
             scenarioHandler.setNextStep(testScenario2.currentStep);
@@ -182,7 +172,12 @@ z-index: 9999999; \
     -webkit-border-radius: 1px;                                                                                 \
     -moz-border-radius: 1px;                                                                                    \
     border-radius: 1px;                                                                                         \
-}                                                                                                               \
+} \
+.xtTopMenu {\
+position: absolute;\
+top: 100;\
+ left: 100;\
+right: 100;\
     ";
     head = document.getElementsByTagName('head')[0],
     style = document.createElement('style');
@@ -200,6 +195,8 @@ z-index: 9999999; \
 
 
 // show bubble 
+
+
 
 
 
